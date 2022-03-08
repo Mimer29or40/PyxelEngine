@@ -1,0 +1,6 @@
+recursive-include src *
+recursive-exclude test *
+recursive-exclude .idea *
+exclude tox.ini
+exclude .flake8
+exclude .isort.cfg
