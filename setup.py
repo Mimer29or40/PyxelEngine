@@ -5,6 +5,7 @@ setup(
         'glfw',
         'PyOpenGL',
         'numpy',
+        'Pillow',
     ],
     tests_require=[
         'tox',
