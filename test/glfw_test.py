@@ -1,7 +1,8 @@
 import sys
 
 import glfw
-from OpenGL.raw.GL.VERSION.GL_1_0 import GL_COLOR_BUFFER_BIT, glClear
+from OpenGL.raw.GL.VERSION.GL_1_0 import GL_COLOR_BUFFER_BIT
+from OpenGL.raw.GL.VERSION.GL_1_0 import glClear
 
 
 def main():

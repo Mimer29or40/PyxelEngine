@@ -8,8 +8,9 @@
       <excludeFolder url="file://$MODULE_DIR$/src/pyxel_engine.egg-info" />
       <excludeFolder url="file://$MODULE_DIR$/src/PyxelEngine.egg-info" />
       <excludeFolder url="file://$MODULE_DIR$/.tox" />
+      <excludeFolder url="file://$MODULE_DIR$/src/PyxelEngine2.egg-info" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (PyxelEngine)" jdkType="Python SDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

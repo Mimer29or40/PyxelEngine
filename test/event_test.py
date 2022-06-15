@@ -10,7 +10,7 @@ def main():
 
     event = EventMouseButtonDown(10.0, None, Button.RIGHT, Vector2(1, 2), 1)
     print(event)
-    
+
     print(Button(3))
     print(Key(65))
 
