@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="types" type="Tox" factoryName="Tox" folderName="tox">
+  <configuration default="false" name="build_exe" type="Tox" factoryName="Tox" folderName="tox">
     <module name="PyxelEngine" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
@@ -17,7 +17,7 @@
     </arguments>
     <runOnlyEnvs>
       <array>
-        <option value="egg_info,types" />
+        <option value="egg_info,build_exe" />
       </array>
     </runOnlyEnvs>
     <method v="2" />

@@ -9,6 +9,8 @@
       <excludeFolder url="file://$MODULE_DIR$/src/PyxelEngine.egg-info" />
       <excludeFolder url="file://$MODULE_DIR$/.tox" />
       <excludeFolder url="file://$MODULE_DIR$/src/PyxelEngine2.egg-info" />
+      <excludeFolder url="file://$MODULE_DIR$/mypy" />
+      <excludeFolder url="file://$MODULE_DIR$/.mypy_cache" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
