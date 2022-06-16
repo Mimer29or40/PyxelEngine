@@ -1,13 +1,10 @@
 from abc import ABC
-from typing import Iterable, Type, Union, overload
+from typing import Iterable, Tuple, Type, Union, overload
 
 import numpy as np
 
 __all__ = [
     "DType",
-    "to_tuple2",
-    "to_tuple3",
-    "to_tuple4",
     "Vector2c",
     "Vector2",
     "Vector3c",
@@ -35,9 +32,9 @@ DType = Union[
     np.float64,
 ]
 
-def to_tuple2(data): ...
-def to_tuple3(data): ...
-def to_tuple4(data): ...
+Vector2Tuple = Tuple[DType, DType]
+Vector3Tuple = Tuple[DType, DType, DType]
+Vector4Tuple = Tuple[DType, DType, DType, DType]
 
 class Vector2c(ABC):
     def __eq__(self, other: Vector2Like) -> bool: ...
@@ -79,6 +76,8 @@ class Vector2c(ABC):
     def smooth_step(self, other: Vector2Like, t: float) -> Vector2: ...
 
 class Vector2(Vector2c, np.ndarray):
+    @staticmethod
+    def to_tuple(data: Vector2Like) -> Vector2Tuple: ...
     @overload
     def __init__(self, x: DType, y: DType, dtype: Type[DType] = float) -> Vector2: ...
     @overload
@@ -160,6 +159,8 @@ class Vector3c(ABC):
     def smooth_step(self, other: Vector3Like, t: float) -> Vector3: ...
 
 class Vector3(Vector3c, np.ndarray):
+    @staticmethod
+    def to_tuple(data: Vector3Like) -> Vector3Tuple: ...
     @overload
     def __init__(
         self, x: DType, y: DType, z: DType, dtype: Type[DType] = float
@@ -252,6 +253,8 @@ class Vector4c(ABC):
     def smooth_step(self, other: Vector4Like, t: float) -> Vector4: ...
 
 class Vector4(Vector4c, np.ndarray):
+    @staticmethod
+    def to_tuple(data: Vector4Like) -> Vector4Tuple: ...
     @overload
     def __init__(
         self, x: DType, y: DType, z: DType, w: DType, dtype: Type[DType] = float
@@ -311,6 +314,6 @@ class Vector4(Vector4c, np.ndarray):
     def magnitude(self, value: DType): ...
     def normalize_self(self) -> Vector4: ...
 
-Vector2Like = Union[Vector2c, np.ndarray, DType, Iterable[DType]]
-Vector3Like = Union[Vector3c, np.ndarray, DType, Iterable[DType]]
-Vector4Like = Union[Vector4c, np.ndarray, DType, Iterable[DType]]
+Vector2Like = Union[Vector2Tuple, Vector2c, np.ndarray, DType, Iterable[DType]]
+Vector3Like = Union[Vector3Tuple, Vector3c, np.ndarray, DType, Iterable[DType]]
+Vector4Like = Union[Vector4Tuple, Vector4c, np.ndarray, DType, Iterable[DType]]

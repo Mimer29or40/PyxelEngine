@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 from abc import ABC
-from typing import Iterable, Type, Union
+from typing import Iterable, Tuple, Type, Union
 
 import numpy as np
 
 __all__ = [
     "DType",
-    "to_tuple2",
-    "to_tuple3",
-    "to_tuple4",
     "Vector2c",
     "Vector2",
     "Vector3c",
@@ -37,52 +34,9 @@ DType = Union[
     np.float64,
 ]
 
-
-def to_tuple2(data):
-    dlen = len(data)
-    if dlen == 0:
-        return 0, 0
-    if dlen == 1:
-        if isinstance(data[0], Iterable) and len(data[0]) == 2:
-            return data[0]
-        return data[0], data[0]
-    if dlen == 2:
-        return data
-    raise TypeError("Invalid Arguments Provided")
-
-
-def to_tuple3(data):
-    dlen = len(data)
-    if dlen == 0:
-        return 0, 0, 0
-    if dlen == 1:
-        if isinstance(data[0], Iterable) and len(data[0]) == 3:
-            return data[0]
-        return data[0], data[0], data[0]
-    if dlen == 2:
-        return *to_tuple2(data[0]), data[1]
-    if dlen == 3:
-        return data
-    raise TypeError("Invalid Arguments Provided")
-
-
-def to_tuple4(data):
-    dlen = len(data)
-    if dlen == 0:
-        return 0, 0, 0, 0
-    if dlen == 1:
-        if isinstance(data[0], Iterable) and len(data[0]) == 4:
-            return data[0]
-        return data[0], data[0], data[0], data[0]
-    if dlen == 2:
-        if isinstance(data[0], Iterable) and len(data[0]) == 3:
-            return *to_tuple3(data[0]), data[1]
-        return *to_tuple2(data[0]), *to_tuple2(data[1])
-    if dlen == 3:
-        return *to_tuple2(data[0]), data[1], data[2]
-    if dlen == 4:
-        return data
-    raise TypeError("Invalid Arguments Provided")
+Vector2Tuple = Tuple[DType, DType]
+Vector3Tuple = Tuple[DType, DType, DType]
+Vector4Tuple = Tuple[DType, DType, DType, DType]
 
 
 class Vector2c(ABC):
@@ -91,8 +45,21 @@ class Vector2c(ABC):
 
 # noinspection PyUnresolvedReferences
 class Vector2(Vector2c, np.ndarray):
+    @staticmethod
+    def to_tuple(data: Vector2Like) -> Vector2Tuple:
+        dlen = len(data)
+        if dlen == 0:
+            return 0, 0
+        if dlen == 1:
+            if isinstance(data[0], Iterable) and len(data[0]) == 2:
+                return data[0]
+            return data[0], data[0]
+        if dlen == 2:
+            return data
+        raise TypeError("Invalid Arguments Provided")
+
     def __new__(cls, *data, dtype: Type[DType] = float):
-        return np.array(to_tuple2(data), dtype=dtype).view(cls)
+        return np.array(cls.to_tuple(data), dtype=dtype).view(cls)
 
     def __eq__(self, other: Vector2Like) -> bool:
         return np.all(super().__eq__(other))
@@ -183,8 +150,24 @@ class Vector3c(ABC):
 
 # noinspection PyUnresolvedReferences
 class Vector3(Vector3c, np.ndarray):
+    # noinspection PyTypeChecker
+    @staticmethod
+    def to_tuple(data: Vector3Like) -> Vector3Tuple:
+        dlen = len(data)
+        if dlen == 0:
+            return 0, 0, 0
+        if dlen == 1:
+            if isinstance(data[0], Iterable) and len(data[0]) == 3:
+                return data[0]
+            return data[0], data[0], data[0]
+        if dlen == 2:
+            return *Vector2.to_tuple(data[0]), data[1]
+        if dlen == 3:
+            return data
+        raise TypeError("Invalid Arguments Provided")
+
     def __new__(cls, *data, dtype: Type[DType] = float):
-        return np.array(to_tuple3(data), dtype=dtype).view(cls)
+        return np.array(cls.to_tuple(data), dtype=dtype).view(cls)
 
     def __eq__(self, other: Vector3Like) -> bool:
         return np.all(super().__eq__(other))
@@ -246,11 +229,11 @@ class Vector3(Vector3c, np.ndarray):
         x = self.x
         y = self.y
         z = self.z
-        length1Squared: float = x * x + (y * y + (z * z))
-        v = to_tuple3(other)
-        length2Squared: float = v[0] * v[0] + (v[1] * v[1] + (v[2] * v[2]))
+        l1_squared: float = x * x + (y * y + (z * z))
+        v = Vector3.to_tuple(other)
+        l2_squared: float = v[0] * v[0] + (v[1] * v[1] + (v[2] * v[2]))
         dot: float = x * v[0] + (y * v[1] + (z * v[2]))
-        cos: float = dot / np.sqrt(length1Squared * length2Squared)
+        cos: float = dot / np.sqrt(l1_squared * l2_squared)
         # This is because sometimes cos goes above 1 or below -1 because of lost precision
         cos = cos if cos < 1 else 1
         cos = cos if cos > -1 else -1
@@ -284,8 +267,28 @@ class Vector4c(ABC):
 
 # noinspection PyUnresolvedReferences
 class Vector4(Vector4c, np.ndarray):
+    # noinspection PyTypeChecker
+    @staticmethod
+    def to_tuple(data: Vector4Like) -> Vector4Tuple:
+        dlen = len(data)
+        if dlen == 0:
+            return 0, 0, 0, 0
+        if dlen == 1:
+            if isinstance(data[0], Iterable) and len(data[0]) == 4:
+                return data[0]
+            return data[0], data[0], data[0], data[0]
+        if dlen == 2:
+            if isinstance(data[0], Iterable) and len(data[0]) == 3:
+                return *Vector3.to_tuple(data[0]), data[1]
+            return *Vector2.to_tuple(data[0]), *Vector2.to_tuple(data[1])
+        if dlen == 3:
+            return *Vector2.to_tuple(data[0]), data[1], data[2]
+        if dlen == 4:
+            return data
+        raise TypeError("Invalid Arguments Provided")
+
     def __new__(cls, *data, dtype: Type[DType] = float):
-        return np.array(to_tuple4(data), dtype=dtype).view(cls)
+        return np.array(cls.to_tuple(data), dtype=dtype).view(cls)
 
     def __eq__(self, other: Vector4Like) -> bool:
         return np.all(super().__eq__(other))
@@ -356,13 +359,11 @@ class Vector4(Vector4c, np.ndarray):
         y = self.y
         z = self.z
         w = self.w
-        length1Squared: float = x * x + (y * y + (z * z + (w * w)))
-        v = to_tuple4(other)
-        length2Squared: float = v[0] * v[0] + (
-            v[1] * v[1] + (v[2] * v[2] + (v[3] * v[3]))
-        )
+        l1_squared: float = x * x + (y * y + (z * z + (w * w)))
+        v = Vector4.to_tuple(other)
+        l2_squared: float = v[0] * v[0] + (v[1] * v[1] + (v[2] * v[2] + (v[3] * v[3])))
         dot: float = x * v[0] + (y * v[1] + (z * v[2] + (w * v[3])))
-        cos: float = dot / np.sqrt(length1Squared * length2Squared)
+        cos: float = dot / np.sqrt(l1_squared * l2_squared)
         # This is because sometimes cos goes above 1 or below -1 because of lost precision
         cos = cos if cos < 1 else 1
         cos = cos if cos > -1 else -1
@@ -390,6 +391,6 @@ class Vector4(Vector4c, np.ndarray):
         )
 
 
-Vector2Like = Union[Vector2c, np.ndarray, DType, Iterable[DType]]
-Vector3Like = Union[Vector3c, np.ndarray, DType, Iterable[DType]]
-Vector4Like = Union[Vector4c, np.ndarray, DType, Iterable[DType]]
+Vector2Like = Union[Vector2Tuple, Vector2c, np.ndarray, DType, Iterable[DType]]
+Vector3Like = Union[Vector3Tuple, Vector3c, np.ndarray, DType, Iterable[DType]]
+Vector4Like = Union[Vector4Tuple, Vector4c, np.ndarray, DType, Iterable[DType]]
