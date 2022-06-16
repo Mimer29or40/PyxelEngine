@@ -6,8 +6,37 @@ from PyxelEngine.math import Vector2
 from PyxelEngine.math import Vector2c
 
 
-class MyTestCase(unittest.TestCase):
-    def test_vector2_types(self):
+class TestVector2(unittest.TestCase):
+    def test_init(self):
+        v: Vector2 = Vector2()
+        self.assertIsInstance(v, Vector2)
+        self.assertIsInstance(v, Vector2c)
+        self.assertEqual(v.dtype, float, "Vector2.dtype must default to float")
+        self.assertEqual(v.x, 0.0, "Vector2.x must default to 0")
+        self.assertEqual(v.y, 0.0, "Vector2.y must default to 0")
+
+        v: Vector2 = Vector2(dtype=int)
+        self.assertIsInstance(v, Vector2)
+        self.assertIsInstance(v, Vector2c)
+        self.assertEqual(v.dtype, int, "Vector2.dtype must be int")
+        self.assertEqual(v.x, 0, "Vector2.x must default to 0")
+        self.assertEqual(v.y, 0, "Vector2.y must default to 0")
+
+        v: Vector2 = Vector2((1.125, 6.075))
+        self.assertIsInstance(v, Vector2)
+        self.assertIsInstance(v, Vector2c)
+        self.assertEqual(v.dtype, float, "Vector2.dtype must be float")
+        self.assertEqual(v.x, 1.125, "Vector2.x must be 1.125")
+        self.assertEqual(v.y, 6.075, "Vector2.y must be 6.075")
+
+        v: Vector2 = Vector2(v)
+        self.assertIsInstance(v, Vector2)
+        self.assertIsInstance(v, Vector2c)
+        self.assertEqual(v.dtype, float, "Vector2.dtype must be float")
+        self.assertEqual(v.x, 1.125, "Vector2.x must be 1.125")
+        self.assertEqual(v.y, 6.075, "Vector2.y must be 6.075")
+
+    def test_types(self):
         v: Vector2 = Vector2(1, 2, dtype=int)
         self.assertIsInstance(v, Vector2)
         self.assertIsInstance(v, Vector2c)
@@ -23,7 +52,7 @@ class MyTestCase(unittest.TestCase):
         self.assertIsInstance(v, Vector2c)
         self.assertEqual(v.dtype, np.uint8)
 
-    def test_vector2_conversions(self):
+    def test_conversions(self):
         v: Vector2 = Vector2(1, 2, dtype=int)
         v = v.astype(float, copy=True)
         self.assertEqual(v.dtype, float)
@@ -42,7 +71,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(v.x, 7)
         self.assertEqual(v.y, 2)
 
-    def test_vector2_instance(self):
+    def test_instance(self):
         v: Vector2 = Vector2(1, 2, dtype=int)
         v_add: Vector2 = v + 1
         self.assertTrue(v is not v_add)
@@ -57,7 +86,7 @@ class MyTestCase(unittest.TestCase):
         v_perp_self = v.perpendicular_self()
         self.assertTrue(v is v_perp_self)
 
-    def test_vector2_equals(self):
+    def test_equals(self):
         v: Vector2 = Vector2(1, 1, dtype=int)
         self.assertTrue(v == 1)
         self.assertTrue(v == (1, 1))
@@ -68,7 +97,7 @@ class MyTestCase(unittest.TestCase):
         self.assertTrue(v != Vector2(1, 2, dtype=int))
         self.assertTrue(v != Vector2(1, 2, dtype=float))
 
-    def test_vector2_add(self):
+    def test_add(self):
         v: Vector2 = Vector2(1, 2, dtype=int)
         v += 1
         self.assertTrue(v == (2, 3))
@@ -114,7 +143,7 @@ class MyTestCase(unittest.TestCase):
         self.assertTrue(v == (2, 4))
         self.assertEqual(v.dtype, float)
 
-    def test_vector2_sub(self):
+    def test_sub(self):
         v: Vector2 = Vector2(1, 2, dtype=int)
         v -= 1
         self.assertTrue(v == (0, 1))

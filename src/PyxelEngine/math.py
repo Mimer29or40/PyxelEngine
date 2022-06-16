@@ -6,6 +6,10 @@ from typing import Iterable, Type, Union
 import numpy as np
 
 __all__ = [
+    "DType",
+    "to_tuple2",
+    "to_tuple3",
+    "to_tuple4",
     "Vector2c",
     "Vector2",
     "Vector3c",
@@ -17,7 +21,9 @@ __all__ = [
     "Vector4Like",
 ]
 
-NTypes = Union[
+DType = Union[
+    int,
+    float,
     np.int8,
     np.int16,
     np.int32,
@@ -30,7 +36,6 @@ NTypes = Union[
     np.float32,
     np.float64,
 ]
-DType = Union[int, float, NTypes]
 
 
 def to_tuple2(data):
@@ -38,7 +43,7 @@ def to_tuple2(data):
     if dlen == 0:
         return 0, 0
     if dlen == 1:
-        if isinstance(data[0], tuple) and len(data[0]) == 2:
+        if isinstance(data[0], Iterable) and len(data[0]) == 2:
             return data[0]
         return data[0], data[0]
     if dlen == 2:
@@ -51,7 +56,7 @@ def to_tuple3(data):
     if dlen == 0:
         return 0, 0, 0
     if dlen == 1:
-        if isinstance(data[0], tuple) and len(data[0]) == 3:
+        if isinstance(data[0], Iterable) and len(data[0]) == 3:
             return data[0]
         return data[0], data[0], data[0]
     if dlen == 2:
@@ -66,11 +71,11 @@ def to_tuple4(data):
     if dlen == 0:
         return 0, 0, 0, 0
     if dlen == 1:
-        if isinstance(data[0], tuple) and len(data[0]) == 4:
+        if isinstance(data[0], Iterable) and len(data[0]) == 4:
             return data[0]
         return data[0], data[0], data[0], data[0]
     if dlen == 2:
-        if isinstance(data[0], tuple) and len(data[0]) == 3:
+        if isinstance(data[0], Iterable) and len(data[0]) == 3:
             return *to_tuple3(data[0]), data[1]
         return *to_tuple2(data[0]), *to_tuple2(data[1])
     if dlen == 3:

@@ -4,6 +4,10 @@ from typing import Iterable, Type, Union, overload
 import numpy as np
 
 __all__ = [
+    "DType",
+    "to_tuple2",
+    "to_tuple3",
+    "to_tuple4",
     "Vector2c",
     "Vector2",
     "Vector3c",
@@ -15,7 +19,9 @@ __all__ = [
     "Vector4Like",
 ]
 
-NTypes = Union[
+DType = Union[
+    int,
+    float,
     np.int8,
     np.int16,
     np.int32,
@@ -28,7 +34,10 @@ NTypes = Union[
     np.float32,
     np.float64,
 ]
-DType = Union[int, float, NTypes]
+
+def to_tuple2(data): ...
+def to_tuple3(data): ...
+def to_tuple4(data): ...
 
 class Vector2c(ABC):
     def __eq__(self, other: Vector2Like) -> bool: ...
@@ -54,7 +63,7 @@ class Vector2c(ABC):
     @property
     def y(self) -> DType: ...
     @property
-    def dtype(self) -> np.dtype: ...
+    def dtype(self) -> Type[DType]: ...
     @property
     def magnitude(self) -> DType: ...
     @property
@@ -136,7 +145,7 @@ class Vector3c(ABC):
     @property
     def z(self) -> DType: ...
     @property
-    def dtype(self) -> np.dtype: ...
+    def dtype(self) -> Type[DType]: ...
     @property
     def magnitude(self) -> DType: ...
     @property
@@ -228,7 +237,7 @@ class Vector4c(ABC):
     @property
     def w(self) -> DType: ...
     @property
-    def dtype(self) -> np.dtype: ...
+    def dtype(self) -> Type[DType]: ...
     @property
     def magnitude(self) -> DType: ...
     @property
