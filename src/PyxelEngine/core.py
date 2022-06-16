@@ -1,8 +1,7 @@
 import logging
 import sys
-import threading
-import traceback
 import time as _time
+import traceback
 from typing import Callable, Final, Optional
 
 import glfw
@@ -199,7 +198,8 @@ def _error_callback(error: int, description: bytes):
     )
 
 
-def _monitor_callback(handle: int, event: int) -> None:
+# noinspection PyProtectedMember
+def _monitor_callback(handle: glfw._GLFWmonitor, event: int) -> None:
     if event == glfw.CONNECTED:
         Monitor.load_monitors()
         monitor: Monitor = Monitor.get_handle(handle)

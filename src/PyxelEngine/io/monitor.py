@@ -80,19 +80,19 @@ class Monitor:
 
     def __repr__(self) -> str:
         return f"Monitor(name='{self._name}', index={self._index})"
-    
+
     @property
     def handle(self) -> glfw._GLFWmonitor:
         return self._handle
-    
+
     @property
     def index(self) -> int:
         return self._index
-    
+
     @property
     def name(self) -> str:
         return self._name
-    
+
     @property
     def primary_video_mode(self) -> VideoMode:
         return self._primary_video_mode
@@ -180,7 +180,9 @@ class Monitor:
 
     @property
     def gamma_ramp(self) -> GammaRamp:
-        gamma_ramp: glfw._GLFWgammaramp.GLFWgammaramp = wait_task(lambda: glfw.get_gamma_ramp(self.handle))
+        gamma_ramp: glfw._GLFWgammaramp.GLFWgammaramp = wait_task(
+            lambda: glfw.get_gamma_ramp(self.handle)
+        )
         return GammaRamp(gamma_ramp=gamma_ramp)
 
     @gamma_ramp.setter
@@ -230,7 +232,9 @@ class GammaRamp:
     green: np.ndarray[float]
 
     # noinspection PyProtectedMember
-    def __init__(self, size: int = None, /, gamma_ramp: glfw._GLFWgammaramp.GLFWgammaramp = None):
+    def __init__(
+        self, size: int = None, /, gamma_ramp: glfw._GLFWgammaramp.GLFWgammaramp = None
+    ):
         if size is None:
             if gamma_ramp is None:
                 raise AttributeError("Must provide a size for GammaRamp")
