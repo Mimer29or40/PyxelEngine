@@ -77,7 +77,7 @@ class Vector2c(ABC):
 
 class Vector2(Vector2c, np.ndarray):
     @staticmethod
-    def to_tuple(data: Vector2Like) -> Vector2Tuple: ...
+    def to_tuple(*data: Vector2Like) -> Vector2Tuple: ...
     @overload
     def __init__(self, x: DType, y: DType, dtype: Type[DType] = float) -> Vector2: ...
     @overload
@@ -160,7 +160,7 @@ class Vector3c(ABC):
 
 class Vector3(Vector3c, np.ndarray):
     @staticmethod
-    def to_tuple(data: Vector3Like) -> Vector3Tuple: ...
+    def to_tuple(*data: Vector3Like) -> Vector3Tuple: ...
     @overload
     def __init__(
         self, x: DType, y: DType, z: DType, dtype: Type[DType] = float
@@ -254,7 +254,7 @@ class Vector4c(ABC):
 
 class Vector4(Vector4c, np.ndarray):
     @staticmethod
-    def to_tuple(data: Vector4Like) -> Vector4Tuple: ...
+    def to_tuple(*data: Vector4Like) -> Vector4Tuple: ...
     @overload
     def __init__(
         self, x: DType, y: DType, z: DType, w: DType, dtype: Type[DType] = float
