@@ -1,9 +1,9 @@
 import logging
 
-from PyxelEngine2.core import destroy
-from PyxelEngine2.core import draw
-from PyxelEngine2.core import setup
-from PyxelEngine2.core import start
+from PyxelEngine.core import destroy
+from PyxelEngine.core import draw
+from PyxelEngine.core import setup
+from PyxelEngine.core import start
 
 
 @setup

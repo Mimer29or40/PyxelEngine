@@ -1,9 +1,9 @@
 import random as _random
 from typing import Callable, Literal, TypeVar, Union
 
-from PyxelEngine2.math import Vector2
-from PyxelEngine2.math import Vector3
-from PyxelEngine2.math import Vector4
+from PyxelEngine.math import Vector2
+from PyxelEngine.math import Vector3
+from PyxelEngine.math import Vector4
 
 T = TypeVar("T", int, float)
 

@@ -1,4 +1,4 @@
-import time
+import time as _time
 
 import numpy as np
 
@@ -20,7 +20,7 @@ class Internal:
 
 
 def setup():
-    Internal.start = time.process_time_ns()
+    Internal.start = _time.process_time_ns()
 
 
 def start_frame() -> bool:
@@ -52,7 +52,7 @@ def end_frame():
 
 
 def get_raw_time_ns() -> int:
-    return time.process_time_ns() - Internal.start if Internal.start > 0 else -1
+    return _time.process_time_ns() - Internal.start if Internal.start > 0 else -1
 
 
 def get_raw_time() -> float:
