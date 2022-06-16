@@ -51,8 +51,8 @@ class Vector2(Vector2c, np.ndarray):
         if dlen == 0:
             return 0, 0
         if dlen == 1:
-            if isinstance(data[0], Iterable) and len(data[0]) == 2:
-                return data[0]
+            if isinstance(data[0], Iterable) and len(data[0]) > 1:
+                return Vector2.to_tuple(data[0])
             return data[0], data[0]
         if dlen == 2:
             return data
@@ -157,8 +157,8 @@ class Vector3(Vector3c, np.ndarray):
         if dlen == 0:
             return 0, 0, 0
         if dlen == 1:
-            if isinstance(data[0], Iterable) and len(data[0]) == 3:
-                return data[0]
+            if isinstance(data[0], Iterable) and len(data[0]) > 1:
+                return Vector3.to_tuple(data[0])
             return data[0], data[0], data[0]
         if dlen == 2:
             return *Vector2.to_tuple(data[0]), data[1]
@@ -274,11 +274,11 @@ class Vector4(Vector4c, np.ndarray):
         if dlen == 0:
             return 0, 0, 0, 0
         if dlen == 1:
-            if isinstance(data[0], Iterable) and len(data[0]) == 4:
-                return data[0]
+            if isinstance(data[0], Iterable) and len(data[0]) > 1:
+                return Vector4.to_tuple(data[0])
             return data[0], data[0], data[0], data[0]
         if dlen == 2:
-            if isinstance(data[0], Iterable) and len(data[0]) == 3:
+            if isinstance(data[0], Iterable) and len(data[0]) > 1:
                 return *Vector3.to_tuple(data[0]), data[1]
             return *Vector2.to_tuple(data[0]), *Vector2.to_tuple(data[1])
         if dlen == 3:
