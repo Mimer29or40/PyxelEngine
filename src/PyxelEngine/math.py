@@ -7,6 +7,9 @@ import numpy as np
 
 __all__ = [
     "DType",
+    "Vector2Tuple",
+    "Vector3Tuple",
+    "Vector4Tuple",
     "Vector2c",
     "Vector2",
     "Vector3c",
@@ -34,15 +37,69 @@ DType = Union[
     np.float64,
 ]
 
-Vector2Tuple = Tuple[DType, DType]
-Vector3Tuple = Tuple[DType, DType, DType]
-Vector4Tuple = Tuple[DType, DType, DType, DType]
-
 
 def _check_single(value: DType) -> DType:
     if isinstance(value, Iterable):
         raise TypeError("Invalid Arguments Provided")
     return value
+
+
+class Vector2Tuple(Tuple[DType, DType]):
+    def __new__(cls, *data) -> Vector2Tuple:
+        dlen = len(data)
+        if dlen == 0:
+            return super().__new__(cls, (0, 0))
+        if dlen == 1:
+            if isinstance(data[0], Iterable):
+                return Vector2Tuple.__new__(cls, *data[0])
+            return super().__new__(cls, (data[0], data[0]))
+        if dlen == 2:
+            return super().__new__(cls, tuple(_check_single(v) for v in data))
+        raise TypeError("Invalid Arguments Provided")
+
+
+class Vector3Tuple(Tuple[DType, DType, DType]):
+    def __new__(cls, *data) -> Vector3Tuple:
+        dlen = len(data)
+        if dlen == 0:
+            return super().__new__(cls, (0, 0, 0))
+        if dlen == 1:
+            if isinstance(data[0], Iterable):
+                return Vector3Tuple.__new__(cls, *data[0])
+            return super().__new__(cls, (data[0], data[0], data[0]))
+        if dlen == 2:
+            if isinstance(data[0], Iterable):
+                return super().__new__(
+                    cls, (*Vector2Tuple(*data[0]), _check_single(data[1]))
+                )
+            raise TypeError("Invalid Arguments Provided")
+        if dlen == 3:
+            return super().__new__(cls, tuple(_check_single(v) for v in data))
+        raise TypeError("Invalid Arguments Provided")
+
+
+class Vector4Tuple(Tuple[DType, DType, DType]):
+    def __new__(cls, *data) -> Vector4Tuple:
+        dlen = len(data)
+        if dlen == 0:
+            return super().__new__(cls, (0, 0, 0, 1))
+        if dlen == 1:
+            if isinstance(data[0], Iterable):
+                return Vector4Tuple.__new__(cls, *data[0])
+            return super().__new__(cls, (data[0], data[0], data[0], 1))
+        if dlen == 2:
+            if isinstance(data[0], Iterable):
+                if isinstance(data[1], Iterable):
+                    return super().__new__(
+                        cls, (*Vector2Tuple(*data[0]), *Vector2Tuple(*data[1]))
+                    )
+                return super().__new__(cls, (*Vector3Tuple(*data[0]), data[1]))
+            raise TypeError("Invalid Arguments Provided")
+        if dlen == 3:
+            return super().__new__(cls, (*tuple(_check_single(v) for v in data), 1))
+        if dlen == 4:
+            return super().__new__(cls, tuple(_check_single(v) for v in data))
+        raise TypeError("Invalid Arguments Provided")
 
 
 class Vector2c(ABC):
@@ -51,22 +108,8 @@ class Vector2c(ABC):
 
 # noinspection PyUnresolvedReferences
 class Vector2(Vector2c, np.ndarray):
-    # noinspection PyTypeChecker
-    @staticmethod
-    def to_tuple(*data: Vector2Like) -> Vector2Tuple:
-        dlen = len(data)
-        if dlen == 0:
-            return 0, 0
-        if dlen == 1:
-            if isinstance(data[0], Iterable) and len(data[0]) > 1:
-                return Vector2.to_tuple(*data[0])
-            return _check_single(data[0]), _check_single(data[0])
-        if dlen == 2:
-            return tuple(_check_single(v) for v in data)
-        raise TypeError("Invalid Arguments Provided")
-
     def __new__(cls, *data, dtype: Type[DType] = float):
-        return np.array(cls.to_tuple(*data), dtype=dtype).view(cls)
+        return np.array(Vector2Tuple(*data), dtype=dtype).view(cls)
 
     def __eq__(self, other: Vector2Like) -> bool:
         return np.all(super().__eq__(other))
@@ -157,31 +200,8 @@ class Vector3c(ABC):
 
 # noinspection PyUnresolvedReferences
 class Vector3(Vector3c, np.ndarray):
-    # noinspection PyTypeChecker
-    @staticmethod
-    def to_tuple(*data: Vector3Like) -> Vector3Tuple:
-        dlen = len(data)
-        if dlen == 0:
-            return 0, 0, 0
-        if dlen == 1:
-            if isinstance(data[0], Iterable) and len(data[0]) > 1:
-                return Vector3.to_tuple(*data[0])
-            return (
-                _check_single(data[0]),
-                _check_single(data[0]),
-                _check_single(data[0]),
-            )
-        if dlen == 2:
-            if isinstance(data[0], Iterable) and len(data[0]) > 1:
-                return *Vector2.to_tuple(*data[0]), _check_single(data[1])
-            if isinstance(data[1], Iterable) and len(data[1]) > 1:
-                return _check_single(data[0]), *Vector2.to_tuple(*data[1])
-        if dlen == 3:
-            return tuple(_check_single(v) for v in data)
-        raise TypeError("Invalid Arguments Provided")
-
     def __new__(cls, *data, dtype: Type[DType] = float):
-        return np.array(cls.to_tuple(*data), dtype=dtype).view(cls)
+        return np.array(Vector3Tuple(*data), dtype=dtype).view(cls)
 
     def __eq__(self, other: Vector3Like) -> bool:
         return np.all(super().__eq__(other))
@@ -244,7 +264,7 @@ class Vector3(Vector3c, np.ndarray):
         y = self.y
         z = self.z
         l1_squared: float = x * x + (y * y + (z * z))
-        v = Vector3.to_tuple(*other)
+        v = Vector3Tuple(*other)
         l2_squared: float = v[0] * v[0] + (v[1] * v[1] + (v[2] * v[2]))
         dot: float = x * v[0] + (y * v[1] + (z * v[2]))
         cos: float = dot / np.sqrt(l1_squared * l2_squared)
@@ -281,54 +301,8 @@ class Vector4c(ABC):
 
 # noinspection PyUnresolvedReferences
 class Vector4(Vector4c, np.ndarray):
-    # noinspection PyTypeChecker
-    @staticmethod
-    def to_tuple(*data: Vector4Like) -> Vector4Tuple:
-        dlen = len(data)
-        if dlen == 0:
-            return 0, 0, 0, 1
-        if dlen == 1:
-            if isinstance(data[0], Iterable) and len(data[0]) > 1:
-                return Vector4.to_tuple(*data[0])
-            return (
-                _check_single(data[0]),
-                _check_single(data[0]),
-                _check_single(data[0]),
-                1,
-            )
-        if dlen == 2:
-            if isinstance(data[0], Iterable) and len(data[0]) > 1:
-                try:
-                    return *Vector3.to_tuple(*data[0]), _check_single(data[1])
-                except TypeError:
-                    return *Vector2.to_tuple(*data[0]), *Vector2.to_tuple(*data[1])
-            if isinstance(data[1], Iterable) and len(data[1]) > 1:
-                return _check_single(data[0]), *Vector3.to_tuple(*data[1])
-        if dlen == 3:
-            if isinstance(data[0], Iterable) and len(data[0]) > 1:
-                return (
-                    *Vector2.to_tuple(*data[0]),
-                    _check_single(data[1]),
-                    _check_single(data[2]),
-                )
-            if isinstance(data[1], Iterable) and len(data[1]) > 1:
-                return (
-                    _check_single(data[0]),
-                    *Vector2.to_tuple(*data[1]),
-                    _check_single(data[2]),
-                )
-            if isinstance(data[2], Iterable) and len(data[2]) > 1:
-                return (
-                    _check_single(data[0]),
-                    _check_single(data[1]),
-                    *Vector2.to_tuple(*data[2]),
-                )
-        if dlen == 4:
-            return tuple(_check_single(v) for v in data)
-        raise TypeError("Invalid Arguments Provided")
-
     def __new__(cls, *data, dtype: Type[DType] = float):
-        return np.array(cls.to_tuple(*data), dtype=dtype).view(cls)
+        return np.array(Vector4Tuple(*data), dtype=dtype).view(cls)
 
     def __eq__(self, other: Vector4Like) -> bool:
         return np.all(super().__eq__(other))

@@ -4,42 +4,53 @@ import numpy as np
 
 from PyxelEngine.math import Vector2
 from PyxelEngine.math import Vector2c
+from PyxelEngine.math import Vector2Tuple
 from PyxelEngine.math import Vector3
+from PyxelEngine.math import Vector3Tuple
 from PyxelEngine.math import Vector4
+from PyxelEngine.math import Vector4Tuple
 
 
 class TestVector2(unittest.TestCase):
     def test_to_tuple(self):
-        x, y = Vector2.to_tuple(0)
+        x, y = Vector2Tuple()
         self.assertEqual(x, 0)
         self.assertEqual(y, 0)
 
-        x, y = Vector2.to_tuple(7.25)
-        self.assertEqual(x, 7.25)
-        self.assertEqual(y, 7.25)
+        x, y = Vector2Tuple(1)
+        self.assertEqual(x, 1)
+        self.assertEqual(y, 1)
 
-        x, y = Vector2.to_tuple((1, 2))
+        x, y = Vector2Tuple(tuple())
+        self.assertEqual(x, 0)
+        self.assertEqual(y, 0)
+
+        x, y = Vector2Tuple((1,))
+        self.assertEqual(x, 1)
+        self.assertEqual(y, 1)
+
+        x, y = Vector2Tuple((1, 2))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
 
-        x, y = Vector2.to_tuple(Vector2(1, 2))
+        x, y = Vector2Tuple(Vector2(1, 2))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
 
-        x, y = Vector2.to_tuple(np.array([1, 2]))
+        x, y = Vector2Tuple(np.array([1, 2]))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
 
-        x, y = Vector2.to_tuple(1, 2)
+        self.assertRaises(TypeError, lambda: Vector2Tuple((1, 2, 3)))
+
+        x, y = Vector2Tuple(1, 2)
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
 
-        self.assertRaises(TypeError, lambda: Vector2.to_tuple((1, 2, 3)))
+        self.assertRaises(TypeError, lambda: Vector2Tuple((1, 2), 3))
+        self.assertRaises(TypeError, lambda: Vector2Tuple(1, (2, 3)))
 
-        self.assertRaises(TypeError, lambda: Vector2.to_tuple((1, 2), 3))
-        self.assertRaises(TypeError, lambda: Vector2.to_tuple(1, (2, 3)))
-
-        self.assertRaises(TypeError, lambda: Vector2.to_tuple(1, 2, 3))
+        self.assertRaises(TypeError, lambda: Vector2Tuple(1, 2, 3))
 
     def test_init(self):
         v: Vector2 = Vector2()
@@ -226,250 +237,218 @@ class TestVector2(unittest.TestCase):
 
 class TestVector3(unittest.TestCase):
     def test_to_tuple(self):
-        x, y, z = Vector3.to_tuple(0)
+        x, y, z = Vector3Tuple()
         self.assertEqual(x, 0)
         self.assertEqual(y, 0)
         self.assertEqual(z, 0)
 
-        x, y, z = Vector3.to_tuple(7.25)
-        self.assertEqual(x, 7.25)
-        self.assertEqual(y, 7.25)
-        self.assertEqual(z, 7.25)
+        x, y, z = Vector3Tuple(1)
+        self.assertEqual(x, 1)
+        self.assertEqual(y, 1)
+        self.assertEqual(z, 1)
 
-        x, y, z = Vector3.to_tuple((1, 2, 3))
+        x, y, z = Vector3Tuple(tuple())
+        self.assertEqual(x, 0)
+        self.assertEqual(y, 0)
+        self.assertEqual(z, 0)
+
+        x, y, z = Vector3Tuple((1,))
+        self.assertEqual(x, 1)
+        self.assertEqual(y, 1)
+        self.assertEqual(z, 1)
+
+        self.assertRaises(TypeError, lambda: Vector3Tuple((1, 2)))
+
+        x, y, z = Vector3Tuple((1, 2, 3))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
 
-        x, y, z = Vector3.to_tuple(Vector3(1, 2, 3))
+        x, y, z = Vector3Tuple(Vector3(1, 2, 3))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
 
-        x, y, z = Vector3.to_tuple(np.array([1, 2, 3]))
+        x, y, z = Vector3Tuple(np.array([1, 2, 3]))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
 
-        x, y, z = Vector3.to_tuple((1, 2), 3)
+        self.assertRaises(TypeError, lambda: Vector3Tuple((1, 2, 3, 4)))
+
+        self.assertRaises(TypeError, lambda: Vector3Tuple(1, 2))
+
+        x, y, z = Vector3Tuple((1, 2), 3)
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
 
-        x, y, z = Vector3.to_tuple(Vector2(1, 2), 3)
+        x, y, z = Vector3Tuple(Vector2(1, 2), 3)
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
 
-        x, y, z = Vector3.to_tuple(np.array([1, 2]), 3)
+        x, y, z = Vector3Tuple(np.array([1, 2]), 3)
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
 
-        x, y, z = Vector3.to_tuple(1, (2, 3))
+        self.assertRaises(TypeError, lambda: Vector3Tuple(1, (2, 3)))
+        self.assertRaises(TypeError, lambda: Vector3Tuple((1, 2, 3), 4))
+        self.assertRaises(TypeError, lambda: Vector3Tuple(1, (2, 3, 4)))
+        self.assertRaises(TypeError, lambda: Vector3Tuple((1, 2), (3, 4)))
+
+        x, y, z = Vector3Tuple(1, 2, 3)
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
 
-        x, y, z = Vector3.to_tuple(1, Vector2(2, 3))
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
+        self.assertRaises(TypeError, lambda: Vector3Tuple((1, 2), 3, 4))
+        self.assertRaises(TypeError, lambda: Vector3Tuple(1, (2, 3), 4))
+        self.assertRaises(TypeError, lambda: Vector3Tuple(1, 2, (3, 4)))
 
-        x, y, z = Vector3.to_tuple(1, np.array([2, 3]))
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-
-        x, y, z = Vector3.to_tuple(1, 2, 3)
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-
-        self.assertRaises(TypeError, lambda: Vector3.to_tuple((1, 2)))
-        self.assertRaises(TypeError, lambda: Vector3.to_tuple((1, 2, 3, 4)))
-
-        self.assertRaises(TypeError, lambda: Vector3.to_tuple(1, 2))
-        self.assertRaises(TypeError, lambda: Vector3.to_tuple((1, 2, 3), 4))
-        self.assertRaises(TypeError, lambda: Vector3.to_tuple(1, (2, 3, 4)))
-        self.assertRaises(TypeError, lambda: Vector3.to_tuple((1, 2), (3, 4)))
-
-        self.assertRaises(TypeError, lambda: Vector3.to_tuple((1, 2), 3, 4))
-        self.assertRaises(TypeError, lambda: Vector3.to_tuple(1, (2, 3), 4))
-        self.assertRaises(TypeError, lambda: Vector3.to_tuple(1, 2, (3, 4)))
-
-        self.assertRaises(TypeError, lambda: Vector3.to_tuple(1, 2, 3, 4))
+        self.assertRaises(TypeError, lambda: Vector3Tuple(1, 2, 3, 4))
 
 
 class TestVector4(unittest.TestCase):
     def test_to_tuple(self):
-        x, y, z, w = Vector4.to_tuple(0)
+        x, y, z, w = Vector4Tuple()
         self.assertEqual(x, 0)
         self.assertEqual(y, 0)
         self.assertEqual(z, 0)
         self.assertEqual(w, 1)
 
-        x, y, z, w = Vector4.to_tuple(7.25)
-        self.assertEqual(x, 7.25)
-        self.assertEqual(y, 7.25)
-        self.assertEqual(y, 7.25)
+        x, y, z, w = Vector4Tuple(1)
+        self.assertEqual(x, 1)
+        self.assertEqual(y, 1)
+        self.assertEqual(z, 1)
         self.assertEqual(w, 1)
 
-        x, y, z, w = Vector4.to_tuple((1, 2, 3, 4))
+        x, y, z, w = Vector4Tuple(tuple())
+        self.assertEqual(x, 0)
+        self.assertEqual(y, 0)
+        self.assertEqual(z, 0)
+        self.assertEqual(w, 1)
+
+        x, y, z, w = Vector4Tuple((1,))
+        self.assertEqual(x, 1)
+        self.assertEqual(y, 1)
+        self.assertEqual(z, 1)
+        self.assertEqual(w, 1)
+
+        self.assertRaises(TypeError, lambda: Vector4Tuple((1, 2)))
+
+        x, y, z, w = Vector4Tuple((1, 2, 3))
+        self.assertEqual(x, 1)
+        self.assertEqual(y, 2)
+        self.assertEqual(z, 3)
+        self.assertEqual(w, 1)
+
+        x, y, z, w = Vector4Tuple(Vector3(1, 2, 3))
+        self.assertEqual(x, 1)
+        self.assertEqual(y, 2)
+        self.assertEqual(z, 3)
+        self.assertEqual(w, 1)
+
+        x, y, z, w = Vector4Tuple(np.array([1, 2, 3]))
+        self.assertEqual(x, 1)
+        self.assertEqual(y, 2)
+        self.assertEqual(z, 3)
+        self.assertEqual(w, 1)
+
+        x, y, z, w = Vector4Tuple((1, 2, 3, 4))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
         self.assertEqual(w, 4)
 
-        x, y, z, w = Vector4.to_tuple(Vector4(1, 2, 3, 4))
+        x, y, z, w = Vector4Tuple(Vector4(1, 2, 3, 4))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
         self.assertEqual(w, 4)
 
-        x, y, z, w = Vector4.to_tuple(np.array([1, 2, 3, 4]))
+        x, y, z, w = Vector4Tuple(np.array([1, 2, 3, 4]))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
         self.assertEqual(w, 4)
 
-        x, y, z, w = Vector4.to_tuple((1, 2), (3, 4))
+        self.assertRaises(TypeError, lambda: Vector4Tuple((1, 2, 3, 4, 5)))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, 2))
+
+        x, y, z, w = Vector4Tuple((1, 2, 3), 4)
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
         self.assertEqual(w, 4)
 
-        x, y, z, w = Vector4.to_tuple(Vector2(1, 2), Vector2(3, 4))
+        x, y, z, w = Vector4Tuple(Vector3(1, 2, 3), 4)
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
         self.assertEqual(w, 4)
 
-        x, y, z, w = Vector4.to_tuple(np.array([1, 2]), np.array([3, 4]))
+        x, y, z, w = Vector4Tuple(np.array([1, 2, 3]), 4)
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
         self.assertEqual(w, 4)
 
-        x, y, z, w = Vector4.to_tuple((1, 2, 3), 4)
+        self.assertRaises(TypeError, lambda: Vector4Tuple((1, 2), 3))
+        self.assertRaises(TypeError, lambda: Vector4Tuple((1, 2, 3, 4), 5))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, (2, 3)))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, (2, 3, 4)))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, (2, 3, 4, 5)))
+
+        x, y, z, w = Vector4Tuple((1, 2), (3, 4))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
         self.assertEqual(w, 4)
 
-        x, y, z, w = Vector4.to_tuple(Vector3(1, 2, 3), 4)
+        x, y, z, w = Vector4Tuple(Vector2(1, 2), Vector2(3, 4))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
         self.assertEqual(w, 4)
 
-        x, y, z, w = Vector4.to_tuple(np.array([1, 2, 3]), 4)
+        x, y, z, w = Vector4Tuple(np.array([1, 2]), np.array([3, 4]))
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
         self.assertEqual(w, 4)
 
-        x, y, z, w = Vector4.to_tuple(1, (2, 3, 4))
+        self.assertRaises(TypeError, lambda: Vector4Tuple((1, 2, 3), (4, 5)))
+        self.assertRaises(TypeError, lambda: Vector4Tuple((1, 2), (3, 4, 5)))
+
+        x, y, z, w = Vector4Tuple(1, 2, 3)
+        self.assertEqual(x, 1)
+        self.assertEqual(y, 2)
+        self.assertEqual(z, 3)
+        self.assertEqual(w, 1)
+
+        self.assertRaises(TypeError, lambda: Vector4Tuple((1, 2), 3, 4))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, (2, 3), 4))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, 2, (3, 4)))
+        self.assertRaises(TypeError, lambda: Vector4Tuple((1, 2), (3, 4), 5))
+        self.assertRaises(TypeError, lambda: Vector4Tuple((1, 2), 3, (4, 5)))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, (2, 3), (4, 5)))
+        self.assertRaises(TypeError, lambda: Vector4Tuple((1, 2, 3), 4, 5))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, (2, 3, 4), 5))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, 2, (3, 4, 5)))
+        self.assertRaises(TypeError, lambda: Vector4Tuple((1, 2), 3, 4, 5))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, (2, 3), 4, 5))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, 2, (3, 4), 5))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, 2, 3, (4, 5)))
+
+        x, y, z, w = Vector4Tuple(1, 2, 3, 4)
         self.assertEqual(x, 1)
         self.assertEqual(y, 2)
         self.assertEqual(z, 3)
         self.assertEqual(w, 4)
 
-        x, y, z, w = Vector4.to_tuple(1, Vector3(2, 3, 4))
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        x, y, z, w = Vector4.to_tuple(1, np.array([2, 3, 4]))
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        x, y, z, w = Vector4.to_tuple((1, 2), 3, 4)
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        x, y, z, w = Vector4.to_tuple(Vector2(1, 2), 3, 4)
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        x, y, z, w = Vector4.to_tuple(np.array([1, 2]), 3, 4)
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        x, y, z, w = Vector4.to_tuple(1, (2, 3), 4)
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        x, y, z, w = Vector4.to_tuple(1, Vector2(2, 3), 4)
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        x, y, z, w = Vector4.to_tuple(1, np.array([2, 3]), 4)
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        x, y, z, w = Vector4.to_tuple(1, 2, (3, 4))
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        x, y, z, w = Vector4.to_tuple(1, 2, Vector2(3, 4))
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        x, y, z, w = Vector4.to_tuple(1, 2, np.array([3, 4]))
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        x, y, z, w = Vector4.to_tuple(1, 2, 3, 4)
-        self.assertEqual(x, 1)
-        self.assertEqual(y, 2)
-        self.assertEqual(z, 3)
-        self.assertEqual(w, 4)
-
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple((1, 2, 3)))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple((1, 2, 3, 4, 5)))
-
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple(1, 2))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple((1, 2, 3, 4), 5))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple(1, (2, 3, 4, 5)))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple((1, 2, 3), (4, 5)))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple((1, 2), (3, 4, 5)))
-
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple(1, 2, 3))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple((1, 2), (3, 4), 5))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple((1, 2), 3, (4, 5)))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple(1, (2, 3), (4, 5)))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple((1, 2, 3), 4, 5))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple(1, (2, 3, 4), 5))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple(1, 2, (3, 4, 5)))
-
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple((1, 2), 3, 4, 5))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple(1, (2, 3), 4, 5))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple(1, 2, (3, 4), 5))
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple(1, 2, 3, (4, 5)))
-
-        self.assertRaises(TypeError, lambda: Vector4.to_tuple(1, 2, 3, 4, 5))
+        self.assertRaises(TypeError, lambda: Vector4Tuple(1, 2, 3, 4, 5))
 
 
 if __name__ == "__main__":
